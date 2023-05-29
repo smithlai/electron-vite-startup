@@ -35,6 +35,27 @@ https://electron-vite.github.io/guide/getting-started.html
         ➜  Network: use --host to expose
         ➜  press h to show help
 
+3. Entry point:
+    vite(viteConfig.ts) -> 
+    electron/main.ts: `win.loadFile(path.join(process.env.DIST, 'index.html'))` ->
+    index.html: `<script type="module" src="/src/main.tsx"></script>` ->
+    /src/main.tsx: `import App from './App.tsx'`
+
+    結論: 
+        進入點主要為 **./index.html** 與 **/src/App.tsx**
+
+
+4. The react object will be compiled to "dist" and "dist-electron"
+    "build.outDir":  https://vitejs.dev/config/build-options.html#build-outdir
+    "dist-electron": https://electron-vite.github.io/plugin/vite-plugin-electron.html (this is manually put main.js and preload.js)
+
+
+5. While build electron, electron-builder will copy "dist-electron" and "dist" to "release/${version}" (electron-builder.json5)
+
+6. Create folder src/components to put our own custom object
+
+
+
 
 
 

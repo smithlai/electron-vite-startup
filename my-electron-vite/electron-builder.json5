@@ -8,6 +8,19 @@
   "directories": {
     "output": "release/${version}"
   },
+  'productName': 'Reactron_WMI',  // 應用程式名稱
+  'copyright': 'Copyright © 2023 Smith',    // 授權宣告
+  
+  // 打包需要用到的原始碼、模組，皆需要寫到 files 內
+  // 'files': [
+  //     'build/**/*',
+  //     'node_modules/**/*',
+  //     'package.json',
+  //     'main.js',
+  //     'preload.js',
+  //     'ipc_main.js',
+  //     'shell.js',
+  // ],
   "files": [
     "dist-electron",
     "dist"
@@ -19,15 +32,22 @@
     ]
   },
   "win": {
+    "icon": 'logo512.png',
     "target": [
       {
         "target": "nsis",
         "arch": [
           "x64"
         ]
+      },
+      {
+        "target": "portable",
+        "arch": [
+          "x64"
+        ]
       }
     ],
-    "artifactName": "${productName}_${version}.${ext}"
+    // "artifactName": "${productName}_${version}.${ext}"
   },
   "nsis": {
     "oneClick": false,
