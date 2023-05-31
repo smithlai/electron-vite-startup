@@ -9,6 +9,9 @@ export default defineConfig({
     react(),
     electron([
       {
+        entry: 'electron/shell.ts',
+      },
+      {
         // Main-Process entry file of the Electron App.
         entry: 'electron/main.ts',
       },

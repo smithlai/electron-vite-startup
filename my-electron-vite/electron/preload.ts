@@ -90,3 +90,19 @@ window.onmessage = ev => {
 }
 
 setTimeout(removeLoading, 4999)
+
+
+
+
+// -------------IPC Render--------------
+// Method 1. carried by windows with electron config contextIsolation:false
+// https://weirenxue.github.io/2021/08/05/electron_window_require/
+// window.ipcRender = require('electron').ipcRenderer;
+// console.log(window.ipcRender)
+
+// Method 2: contextBridge with electron config contextIsolation:true
+const { contextBridge, ipcRenderer } = require('electron');
+// expose ipcRenderer to renderer process
+contextBridge.exposeInMainWorld('myAPI', {
+  ipcRenderer: ipcRenderer,
+});
