@@ -53,7 +53,7 @@ import { executeCommand } from './shell.js' // remember to add this in vite conf
 
 // https://stackoverflow.com/questions/45148110/how-to-add-a-callback-to-ipc-renderer-send
 import { ipcMain, IpcMainInvokeEvent } from 'electron';
-ipcMain.handle('exec', async (event: IpcMainInvokeEvent, command: string): Promise<string> => {
+ipcMain.handle('executeCommand', async (event: IpcMainInvokeEvent, command: string): Promise<string> => {
   const promise = executeCommand(command);
   return promise;
 })

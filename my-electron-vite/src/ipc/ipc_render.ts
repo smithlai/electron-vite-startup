@@ -6,7 +6,7 @@
 // Method 2: contextBridge with electron config contextIsolation:true
 const ipcRenderer = window.myAPI.ipcRenderer;
 
-export const exec = async (cmd) =>{
-    const result = await ipcRenderer.invoke('exec', cmd);
+export const executeCommand = async (cmd) =>{
+    const result = await ipcRenderer.invoke('executeCommand', cmd);
     console.log(result); // prints "foo"
 }

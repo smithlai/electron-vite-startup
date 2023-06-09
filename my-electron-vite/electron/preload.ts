@@ -95,7 +95,7 @@ setTimeout(removeLoading, 4999)
 
 
 // -------------IPC Render--------------
-// Method 1. carried by windows with electron config contextIsolation:false
+// Method 1. we expose electron object to React via window global object with electron config contextIsolation:false
 // https://weirenxue.github.io/2021/08/05/electron_window_require/
 // window.ipcRender = require('electron').ipcRenderer;
 // console.log(window.ipcRender)

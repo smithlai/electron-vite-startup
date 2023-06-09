@@ -1,5 +1,5 @@
 import { exec } from 'child_process';
-
+//ts
 export const executeCommand = (command: string): Promise<string> => {
   return new Promise((resolve, reject) => {
     exec(command, (error: Error | null, stdout: string, stderr: string) => {
@@ -12,10 +12,12 @@ export const executeCommand = (command: string): Promise<string> => {
   });
 };
 
+
+
 // --- js ----
 // const { exec } = require('child_process');
 
-// exports.exec = (command) => {
+// exports.executeCommand = (command) => {
 //   return new Promise((resolve, reject) => {
 //     exec(command, (error, stdout, stderr) => {
 //       if (error) {
