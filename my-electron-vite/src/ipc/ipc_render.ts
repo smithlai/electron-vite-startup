@@ -4,9 +4,11 @@
 // const aaa = require('electron').ipcRenderer
 
 // Method 2: contextBridge with electron config contextIsolation:true
-const ipcRenderer = window.myAPI.ipcRenderer;
+// const ipcRenderer = window.myAPI.ipcRenderer;
 
-export const executeCommand = async (cmd) =>{
-    const result = await ipcRenderer.invoke('executeCommand', cmd);
-    console.log(result); // prints "foo"
+export const executeCommand = async (cmd: string) =>{
+    // const result = await ipcRenderer.invoke('executeCommand', cmd);
+    // console.log(result); // prints "foo"
+    cmd
+    console.log("fooooo");
 }

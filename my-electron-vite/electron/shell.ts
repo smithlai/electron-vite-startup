@@ -3,6 +3,7 @@ import { exec } from 'child_process';
 export const executeCommand = (command: string): Promise<string> => {
   return new Promise((resolve, reject) => {
     exec(command, (error: Error | null, stdout: string, stderr: string) => {
+      stderr
       if (error) {
         reject(error);
       } else {

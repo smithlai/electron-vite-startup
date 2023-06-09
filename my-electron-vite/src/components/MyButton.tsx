@@ -1,5 +1,5 @@
 import Button from '@mui/material/Button';
-import { executeCommand as  ipc_render_executeCommand} from '../ipc/ipc_render';
+import { executeCommand as  ipc_render_executeCommand} from '../ipc/ipc_render.ts';
 
 export default function MyButton() {
     function handleClick() {

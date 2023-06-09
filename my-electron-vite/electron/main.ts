@@ -13,12 +13,12 @@ process.env.DIST = path.join(__dirname, '../dist')
 process.env.PUBLIC = app.isPackaged ? process.env.DIST : path.join(process.env.DIST, '../public')
 
 
-let win: BrowserWindow | null
+// let win: BrowserWindow | null
 // 🚧 Use ['ENV_NAME'] avoid vite:define plugin - Vite@2.x
 const VITE_DEV_SERVER_URL = process.env['VITE_DEV_SERVER_URL']
 
 function createWindow() {
-  win = new BrowserWindow({
+  const win = new BrowserWindow({
     icon: path.join(process.env.PUBLIC, 'electron-vite.svg'),
     webPreferences: {
       contextIsolation: true, // true:  `const ipcRenderer  = window.ipcRender` is undefined 
@@ -40,13 +40,46 @@ function createWindow() {
     // win.loadFile('dist/index.html')
     win.loadFile(path.join(process.env.DIST, 'index.html'))
   }
+  return win
+}
+function main(){
+  const win = createWindow()
+  win
+  // const splash = splashScreen();
+  // splash.webContents.openDevTools()
+  // setTimeout(function(){
+      // splash.destroy();
+  // win.maximize();
+  // win.show();
+  //   },2000)
+
 }
 
-app.on('window-all-closed', () => {
-  win = null
+// This method will be called when Electron has finished
+// initialization and is ready to create browser windows.
+// 有些 API 只能在這個事件發生後才能用。
+app.whenReady().then(() => {
+  main()
+
+  app.on('activate', () => {
+      // 且沒有其他視窗開啟的情況下，
+      // 重新在應用程式裡建立視窗。
+      if (BrowserWindow.getAllWindows().length === 0) {
+      // 在 macOS 中，一般會在使用者按了 Dock 圖示
+          main()
+      }
+  })
 })
 
-app.whenReady().then(createWindow)
+// Quit when all windows are closed.
+app.on('window-all-closed', () => {
+  // 在 macOS 中，一般會讓應用程式及選單列繼續留著，
+  // 除非使用者按了 Cmd + Q 確定終止它們
+  if (process.platform !== 'darwin') {
+      app.quit()
+  }
+})
+
 
 // ======= Register event =======
 import { executeCommand } from './shell.js' // remember to add this in vite config.ts
@@ -54,6 +87,7 @@ import { executeCommand } from './shell.js' // remember to add this in vite conf
 // https://stackoverflow.com/questions/45148110/how-to-add-a-callback-to-ipc-renderer-send
 import { ipcMain, IpcMainInvokeEvent } from 'electron';
 ipcMain.handle('executeCommand', async (event: IpcMainInvokeEvent, command: string): Promise<string> => {
+  event
   const promise = executeCommand(command);
   return promise;
 })
