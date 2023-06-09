@@ -3,9 +3,10 @@ import GaugeChart from 'react-gauge-chart'
 import React, { useState } from 'react';
 
 export default function Gauge() {
+  React
   const [temperature, setTemperature] = useState(0);
 
-  function handleTemperatureChange(event) {
+  function handleTemperatureChange(event: any) {
     setTemperature(event.target.value);
   }
 

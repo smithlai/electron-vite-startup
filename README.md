@@ -76,14 +76,15 @@ https://electron-vite.github.io/guide/getting-started.html
         ]
     ```
 6. Create folder src/components to put our own custom object
-    > ProfileSimple.jsx  
-    > Profile.jsx  
+    > ProfileSimple.tsx  
+    > Profile.tsx  
     ```sh
-    yarn add 'react-gauge-chart'
+    # yarn add 'react-gauge-chart'
+    yarn add '@types/react-gauge-chart'
     # material-react-table + MUI
     yarn add material-react-table @mui/material @mui/icons-material @emotion/react @emotion/styled
     ```
-    > MyButton.jsx  
+    > MyButton.tsx  
     > ......
 
 7. IPC
