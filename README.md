@@ -64,6 +64,12 @@ https://electron-vite.github.io/guide/getting-started.html
             .....
             electron([
             {
+                entry: 'electron/context_bridge.ts', // add your custom ts
+            },
+            {
+                entry: 'electron/ipc_handler.ts', // add your custom ts
+            },
+            {
                 entry: 'electron/shell.ts', // add your custom ts
             },
             {
@@ -87,55 +93,77 @@ https://electron-vite.github.io/guide/getting-started.html
     > MyButton.tsx  
     > ......
 
-7. IPC
-    1. **IMPORTANT** in preload.js
-        ```js
-        // Method 1. we expose electron object to React via window global object with electron config contextIsolation:false
-        // https://weirenxue.github.io/2021/08/05/electron_window_require/
-        // window.ipcRender = require('electron').ipcRenderer;
-        
-        // Method 2: contextBridge with electron config contextIsolation:true
-        const { contextBridge, ipcRenderer } = require('electron');
-        // expose ipcRenderer to renderer process
-        contextBridge.exposeInMainWorld('myAPI', {
-            ipcRenderer: ipcRenderer,
-        });
+7. **IMPORTANT** IPC
+    1.  [context bridge] in preload.js (context_bridge.ts)
+        ```ts
+            // https://stackoverflow.com/questions/45148110/how-to-add-a-callback-to-ipc-renderer-send
+            // [IMPORTANT]contextBridge with electron config contextIsolation:true
+            import { ipcRenderer, contextBridge } from 'electron';
+            // // Adds an object 'api' to the global window object:
+            contextBridge.exposeInMainWorld('handler', {
+                // expose ipcRenderer to renderer process
+                ipcRenderer: ipcRenderer, 
+                //<render>--------------------------<main>
+                test: arg => ipcRenderer.invoke('test', arg),
+
+            });
         ```
    
-    2. in main thread 
+    2. IPC Handler in main thread 
 
-        > main.ts:  
+        > main.ts (ipc_handler.ts):
         ```js
-        import { executeCommand } from './shell.js' // remember to add this in vite config.ts
+            // https://stackoverflow.com/questions/45148110/how-to-add-a-callback-to-ipc-renderer-send
+            import { ipcMain, IpcMainInvokeEvent } from 'electron';
 
-        // https://stackoverflow.com/questions/45148110/how-to-add-a-callback-to-ipc-renderer-send
-        import { ipcMain, IpcMainInvokeEvent } from 'electron';
-        ipcMain.handle('executeCommand', async (event: IpcMainInvokeEvent, command: string): Promise<string> => {
-        const promise = executeCommand(command);
-        return promise;
-        })
+            ipcMain.handle('executeCommand', async (event: IpcMainInvokeEvent, command: string): Promise<string> => {
+            const promise = executeCommand(command);
+            return promise;
+            })
+
+            ipcMain.handle('an-action', async (event, arg) => {
+                console.log("aaaaaaaaaaaaa")
+                return "foo";
+            })
         ```
 
-    3. ipc_render.ts
-        ```js
-        // Method 1. we expose electron object to React via window global object with electron config contextIsolation:false
-        // https://stackoverflow.com/questions/45148110/how-to-add-a-callback-to-ipc-renderer-send
-        // const ipcRenderer  = window.ipcRender
-        // const aaa = require('electron').ipcRenderer
+    3. ipc_apis.ts
+        ```ts            
+            // To fix:
+            // error TS7006: Parameter 'arg' implicitly has an 'any' type.
+            // src/components/MyButton.tsx:8:39 - error TS2339: Property 'handler' does not exist on type 'Window & typeof globalThis'.
 
-        // Method 2: contextBridge with electron config contextIsolation:true
-        const ipcRenderer = window.myAPI.ipcRenderer;
+            declare global {
+                interface Window {
+                    handler:any;
+                }
+            }
+            const ipcRenderer = window.handler.ipcRenderer;
 
-        export const executeCommand = async (cmd) =>{
-            const result = await ipcRenderer.invoke('executeCommand', cmd);
-        }
+            // https://stackoverflow.com/questions/45148110/how-to-add-a-callback-to-ipc-renderer-send
+            export const apis = {
+                'test': async () => {
+                    const response = await window.handler.test([1,2,3]);
+                    console.log(response); // we now have the response from the main thread without exposing
+                                        // ipcRenderer, leaving the app less vulnerable to attack    
+                },
+                'executeCommand':async (cmd: string) =>{
+                    const result = await ipcRenderer.invoke('executeCommand', cmd);
+                    console.log(result); // prints "foo"
+                }
+            }
+
         ```
     4. usage:  
         ```js
-        import { executeCommand as  ipc_render_executeCommand} from '../ipc/ipc_render';
+        import { apis } from '../ipc/ipc_apis.ts';
         function handleClick() {
-            ipc_render_executeCommand("dir /B")
+            apis.executeCommand("ipconfig")
         }
         ```
+    5. If you want to add more APIs, just modify
+        > ipc_handler.ts  
+        and  
+        > ipc_apis.ts  
 
 yarn add wmic
