@@ -19,7 +19,19 @@ export const apis = {
     },
     'executeCommand':async (cmd: string) =>{
         const result = await ipcRenderer.invoke('executeCommand', cmd);
-        console.log(result); // prints "foo"
+        // console.log(result);
+        return result
+    },
+    'executePowerShell':async (cmd: string) =>{
+        const result = await ipcRenderer.invoke('executePowerShell', cmd);
+        // console.log(result);
+        return result
+    },
+    'executeWMI':async (wmiQuery: string, useCIM: Boolean = false) =>{
+        const result = await ipcRenderer.invoke('executeWMI', wmiQuery, useCIM);
+        // console.log(result);
+        return result
     }
+
 }
 

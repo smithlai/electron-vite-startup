@@ -16,8 +16,7 @@
     "material-react-table": "^1.12.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-gauge-chart": "^0.4.1",
-    "wmic": "^1.1.1"
+    "react-gauge-chart": "^0.4.1"
   },
   "devDependencies": {
     "@types/react": "^18.0.37",

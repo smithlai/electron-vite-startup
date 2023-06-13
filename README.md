@@ -165,5 +165,3 @@ https://electron-vite.github.io/guide/getting-started.html
         > ipc_handler.ts  
         and  
         > ipc_apis.ts  
-
-yarn add wmic
