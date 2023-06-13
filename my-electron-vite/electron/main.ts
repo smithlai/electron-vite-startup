@@ -19,6 +19,7 @@ const VITE_DEV_SERVER_URL = process.env['VITE_DEV_SERVER_URL']
 
 function createWindow() {
   const win = new BrowserWindow({
+    autoHideMenuBar: true,  // 自動隱藏應用程序工具欄
     icon: path.join(process.env.PUBLIC, 'electron-vite.svg'),
     webPreferences: {
       contextIsolation: true, // true:  `const ipcRenderer  = window.ipcRender` is undefined 
@@ -28,7 +29,8 @@ function createWindow() {
       preload: path.join(__dirname, 'preload.js'),
     },
   })
-  win.webContents.openDevTools()
+  if (!app.isPackaged)
+    win.webContents.openDevTools()
   // Test active push message to Renderer-process.
   win.webContents.on('did-finish-load', () => {
     win?.webContents.send('main-process-message', (new Date).toLocaleString())
