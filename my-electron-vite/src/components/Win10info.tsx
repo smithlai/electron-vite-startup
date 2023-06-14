@@ -47,17 +47,17 @@ function createData(name: string, value: string,) {
  */
 function fetchdatas(category, props, cb){
   const useCIM = true
-  let type = useCIM?"Get-CimInstance":"Get-WmiObject"
+  let type = useCIM?"Get-CimInstance":"Get-WmiObject"  
   // Get-CimInstance Win32_ComputerSystem | Select-Object "Model", "Name", "TotalPhysicalMemory" | Format-Table -HideTableHeaders
   apis.executePowerShell(`
-      \$infos = ${type} ${category} | Select-Object ${props.join(",")}
-      $props = ${props.map(prop => `"${prop}"`).join(",")}
-      foreach (\$info in \$infos) {
-        foreach (\$prop in \$props) {
-          Write-Host "\$(\$info.$prop)"
-        }
-      }
-  `).then(
+\$infos = ${type} ${category} | Select-Object ${props.join(",")}
+$props = ${props.map(prop => `"${prop}"`).join(",")}
+foreach (\$info in \$infos) {
+  foreach (\$prop in \$props) {
+    Write-Host "\$(\$info.$prop)"
+  }
+}
+  `, true).then(
     (value) => {
       // cb(value)
       const lines: string[] = value.split("\n").filter(line => line.trim() !== '');
@@ -86,6 +86,7 @@ function fetchdatas(category, props, cb){
 
 export default function BasicTable() {
   let anyLoading = new Set<string>()
+  // Refers to : https://react.dev/learn#updating-the-screen
   const [rows, setRows] = useState([
     createData("Model", "----"),
     createData("Name", "----"),
@@ -117,8 +118,7 @@ export default function BasicTable() {
    * 更新資料，從 WMI 中獲取並插入到表格中
    */
   const updateData = () => {
-
-    //example: fetchdata("Win32_ComputerSystem", "-ExpandProperty Model", (v)=> {insertData("Model", v)})
+    // 1. Fetch Win32_ComputerSystem
     anyLoading.add("Win32_ComputerSystem")
     fetchdatas("Win32_ComputerSystem", ["Model", "Name", "TotalPhysicalMemory"], (infos)=> {
       for(const i in infos){
@@ -130,7 +130,7 @@ export default function BasicTable() {
       }
       anyLoading.delete("Win32_ComputerSystem")
     })
-
+    // 2. Fetch Win32_DiskDrive
     anyLoading.add("Win32_DiskDrive")
     fetchdatas("Win32_DiskDrive", ["DeviceID", "Model", "Size"], infos=>{
       for(const i in infos){

@@ -22,16 +22,16 @@ export const apis = {
         // console.log(result);
         return result
     },
-    'executePowerShell':async (cmd: string) =>{
-        const result = await ipcRenderer.invoke('executePowerShell', cmd);
+    'executePowerShell':async (cmd: string, forceUTF8=true) =>{
+        const result = await ipcRenderer.invoke('executePowerShell', cmd, forceUTF8);
         // console.log(result);
         return result
     },
-    'executeWMI':async (wmiQuery: string, useCIM: Boolean = false) =>{
-        const result = await ipcRenderer.invoke('executeWMI', wmiQuery, useCIM);
-        // console.log(result);
-        return result
-    }
+    // 'executeWMI':async (wmiQuery: string, useCIM: Boolean = false) =>{
+    //     const result = await ipcRenderer.invoke('executeWMI', wmiQuery, useCIM);
+    //     // console.log(result);
+    //     return result
+    // }
 
 }
 

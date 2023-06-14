@@ -14,19 +14,21 @@ export const executeCommand = (command: string, options = {}): Promise<string> =
   });
 };
 
-export const executePowerShell = (powershellCommand: string): Promise<string> => {
-  // const powershellCommand = `powershell.exe -command "${command}"`;
-  // console.log(powershellCommand)
+export const executePowerShell = (powershellCommand: string, forceUTF8=true): Promise<string> => {
   const options =  {'shell':'powershell.exe'}
-  return executeCommand(powershellCommand, options)
+  let encodeutf8 = (forceUTF8)?"[Console]::OutputEncoding = [System.Text.Encoding]::UTF8":""
+  return executeCommand(`
+${encodeutf8}
+${powershellCommand}
+`, options)
 };
 
 // 
-export const executeWMI = (wmiQuery: string, useCIM:Boolean = false): Promise<string> => {
-  let type = useCIM?"Get-CimInstance":"Get-WmiObject"
-  // const wmiQuery = 'Get-WmiObject -Class Win32_Process';
-  return executePowerShell(`${type} ${wmiQuery}`)
-};
+// export const executeWMI = (wmiQuery: string, useCIM:Boolean = false): Promise<string> => {
+//   let type = useCIM?"Get-CimInstance":"Get-WmiObject"
+//   // const wmiQuery = 'Get-WmiObject -Class Win32_Process';
+//   return executePowerShell(`${type} ${wmiQuery}`)
+// };
 
 
 // 執行WMI查詢
