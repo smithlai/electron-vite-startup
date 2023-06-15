@@ -9,6 +9,12 @@ export default defineConfig({
     react(),
     electron([
       {
+        entry: 'electron/context_bridge.ts',
+      },
+      {
+        entry: 'electron/ipc_handler.ts',
+      },
+      {
         entry: 'electron/shell.ts',
       },
       {

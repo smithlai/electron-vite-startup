@@ -91,18 +91,5 @@ window.onmessage = ev => {
 
 setTimeout(removeLoading, 4999)
 
-
-
-
-// -------------IPC Render--------------
-// Method 1. we expose electron object to React via window global object with electron config contextIsolation:false
-// https://weirenxue.github.io/2021/08/05/electron_window_require/
-// window.ipcRender = require('electron').ipcRenderer;
-// console.log(window.ipcRender)
-
-// Method 2: contextBridge with electron config contextIsolation:true
-const { contextBridge, ipcRenderer } = require('electron');
-// expose ipcRenderer to renderer process
-contextBridge.exposeInMainWorld('myAPI', {
-  ipcRenderer: ipcRenderer,
-});
+// https://stackoverflow.com/questions/45148110/how-to-add-a-callback-to-ipc-renderer-send
+import "./context_bridge.ts"

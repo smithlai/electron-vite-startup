@@ -1,9 +1,10 @@
 import Button from '@mui/material/Button';
-import { executeCommand as  ipc_render_executeCommand} from '../ipc/ipc_render';
+import { apis } from '../ipc/ipc_apis.ts';
 
 export default function MyButton() {
     function handleClick() {
-      ipc_render_executeCommand("dir /B")
+    
+      apis.executeCommand("dir /b")
     }
     return (
       <Button variant="contained" onClick={handleClick}>

@@ -1,8 +1,19 @@
 import React, { useMemo } from 'react';
-import MaterialReactTable from 'material-react-table';
+import { MaterialReactTable, type MRT_ColumnDef } from 'material-react-table';
+
+//example data type
+type Person = {
+  name: {
+    firstName: string;
+    lastName: string;
+  };
+  address: string;
+  city: string;
+  state: string;
+};
 
 //nested data is ok, see accessorKeys in ColumnDef below
-const data = [
+const data: Person[] = [
   {
     name: {
       firstName: 'John',
@@ -45,34 +56,41 @@ const data = [
       lastName: 'Rolluffs',
     },
     address: '32188 Larkin Turnpike',
-    city: 'Charleston',
-    state: 'South Carolina',
+    city: 'Omaha',
+    state: 'Nebraska',
   },
 ];
 
 const Example = () => {
+  React
+  MaterialReactTable
   //should be memoized or stable
-  const columns = useMemo(
+  const columns = useMemo<MRT_ColumnDef<Person>[]>(
     () => [
       {
         accessorKey: 'name.firstName', //access nested data with dot notation
         header: 'First Name',
+        size: 150,
       },
       {
         accessorKey: 'name.lastName',
         header: 'Last Name',
+        size: 150,
       },
       {
         accessorKey: 'address', //normal accessorKey
         header: 'Address',
+        size: 200
       },
       {
         accessorKey: 'city',
         header: 'City',
+        size: 150,
       },
       {
         accessorKey: 'state',
         header: 'State',
+        size: 150
       },
     ],
     [],
